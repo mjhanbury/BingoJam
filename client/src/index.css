@@ -1,0 +1,65 @@
+:root {
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+body, #root {
+	height: 100vh;
+	width: 100vw;
+	
+	font-family: Helvetica, Arial, sans-serif;
+	
+	background-color: blue;
+	animation: bg-fade 5s infinite alternate;
+}
+
+@keyframes bg-fade {
+	0% {
+		background-color: hsl(25, 80%, 68%);
+	}
+	25% {
+		background-color: hsl(15, 35%, 62%);
+	}
+	50% {
+		background-color: hsl(40, 40%, 72%);
+	}
+	75% {
+		background-color: hsl(27, 42%, 62%);
+	}
+	100% {
+		background-color: hsl(45, 35%, 78%);
+	}
+}
+
+@keyframes color-fade {
+	0% {
+		color: hsl(25, 100%, 78%);
+	}
+	25% {
+		color: hsl(15, 85%, 72%);
+	}
+	50% {
+		color: hsl(40, 90%, 82%);
+	}
+	75% {
+		color: hsl(27, 92%, 72%);
+	}
+	100% {
+		color: hsl(45, 85%, 88%);
+	}
+}
+
+.animated-gradient {
+  height: 100vh;                     /* full-screen demo */
+  background: linear-gradient(
+    -45deg,                           /* <-- the angle */
+    blue, red, blue
+  );
+  background-size: 600% 600%;        /* big enough to slide */
+  color: white;
+  animation: angledShift 5s linear infinite;
+}
+
+@keyframes angledShift {
+  0%   { background-position: 0%   50%; }
+  100%  { background-position: 100% 50%; }
+}

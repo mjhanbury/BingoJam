@@ -1,0 +1,11 @@
+# Play Screen
+- Count down to song
+- Play specified timestamp range of song
+- Play Again Button
+- Bingo! Button
+  - Confetti
+  - Show List in Order of Previous songs with Play buttons
+  - Enter the winner name
+  - History of previous winners
+- Next Song Button
+- Exit Button
