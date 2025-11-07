@@ -3,20 +3,25 @@ import { Col, Row, Container } from "react-bootstrap";
 import { motion } from 'framer-motion'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faForward, faRepeat } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faForward, faRepeat } from "@fortawesome/free-solid-svg-icons";
 
 const ReplayButton = () => {
     return (
         <>
             <motion.button
-                whileHover={{ scale: 1.1, rotate: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.5, delay: 5.5 }}
+
+                whileHover={{ scale: 1.1, rotate: 0, backgroundColor: 'white' }}
                 whileTap={{ scale: 0.9, rotate: 5 }}
                 style={{
-                    width: 150,
+                    width: 200,
                     height: 50,
-                    backgroundColor: 'white',
+                    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                    border: '1px white solid',
                     borderRadius: 25,
-                    border: 'none',
                     fontSize: '1rem',
                     display: 'flex',
                     justifyContent: 'space-around',
@@ -34,14 +39,19 @@ const BingoButton = () => {
     return (
         <>
             <motion.button
-                whileHover={{ scale: 1.1, rotate: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.5, delay: 5.6 }}
+
+                whileHover={{ scale: 1.1, rotate: 0, backgroundColor: 'white' }}
                 whileTap={{ scale: 0.9, rotate: 5 }}
                 style={{
-                    width: 150,
+                    width: 200,
                     height: 50,
-                    backgroundColor: 'white',
+                    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                    border: '1px white solid',
                     borderRadius: 25,
-                    border: 'none',
                     fontSize: '1rem',
                     display: 'flex',
                     justifyContent: 'space-around',
@@ -50,6 +60,7 @@ const BingoButton = () => {
                 className="animated-gradient"
                 >
                 Bingo!
+                <FontAwesomeIcon icon={faBell} />
             </motion.button>
         </>
     )
@@ -59,14 +70,19 @@ const NextButton = () => {
     return (
         <>
             <motion.button
-                whileHover={{ scale: 1.1, rotate: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.5, delay: 5.7 }}
+    
+                whileHover={{ scale: 1.1, rotate: 0, backgroundColor: 'white' }}
                 whileTap={{ scale: 0.9, rotate: 5 }}
                 style={{
-                    width: 150,
+                    width: 200,
                     height: 50,
-                    backgroundColor: 'white',
+                    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                    border: '1px white solid',
                     borderRadius: 25,
-                    border: 'none',
                     fontSize: '1rem',
                     display: 'flex',
                     justifyContent: 'space-around',
@@ -80,20 +96,129 @@ const NextButton = () => {
     )
 }
 
+const MusicNote = ({ size, duration }) => {
+    return (
+        <motion.svg initial={'hidden'} animate={'visible'} height={size} width={size} style={{ marginBottom: 24 }}>
+            <motion.circle
+                cx={size / 6 + 10} cy={size - size / 6 - 10} r={size / 6}
+                stroke={'white'}
+                variants={{
+                    hidden: { pathLength: 0, opacity: 0 },
+                    visible: {
+                        pathLength: 1,
+                        opacity: 1,
+                        transition: {
+                            pathLength: { duration, ease: 'linear' },
+                            opacity: { duration: 0.01 },
+                        }
+                    }
+                }}
+                style={{
+                    strokeWidth: 10,
+                    strokeLinecap: "round",
+                    fill: "transparent",
+                }}
+            />
+            <motion.circle
+                cx={size - size / 6 - 10} cy={size - size / 6 - 10} r={size / 6}
+                stroke={'white'}
+                variants={{
+                    hidden: { pathLength: 0, opacity: 0 },
+                    visible: {
+                        pathLength: 1,
+                        opacity: 1,
+                        transition: {
+                            pathLength: { duration, ease: 'linear' },
+                            opacity: { duration: 0.01 },
+                        }
+                    }
+                }}
+                style={{
+                    strokeWidth: 10,
+                    strokeLinecap: "round",
+                    fill: "transparent",
+                    scaleY: -1,
+                    transformOrigin: 'center'
+                }}
+            />
+
+            <motion.line
+                x1={size / 3 + 10} y1={10}
+                x2={size / 3 + 10} y2={size - size / 6 - 10}
+                stroke={'white'}
+                variants={{
+                    hidden: { pathLength: 0, opacity: 0 },
+                    visible: {
+                        pathLength: 1,
+                        opacity: 1,
+                        transition: {
+                            pathLength: { duration, ease: 'linear' },
+                            opacity: { duration: 0.01 },
+                        }
+                    }
+                }}
+                style={{
+                    strokeWidth: 10,
+                    strokeLinecap: "round",
+                    fill: "transparent",
+                }}
+            />
+
+            <motion.line
+                x1={size / 3 + 10} y1={10}
+                x2={size - 10} y2={10}
+                stroke={'white'}
+                variants={{
+                    hidden: { pathLength: 0, opacity: 0 },
+                    visible: {
+                        pathLength: 1,
+                        opacity: 1,
+                        transition: {
+                            pathLength: { duration, ease: 'linear' },
+                            opacity: { duration: 0.01 },
+                        }
+                    }
+                }}
+                style={{
+                    strokeWidth: 10,
+                    strokeLinecap: "round",
+                    fill: "transparent",
+                }}
+            />
+
+            <motion.line
+                x1={size - 10} y1={10}
+                x2={size - 10} y2={size - size / 6 - 10}
+                stroke={'white'}
+                variants={{
+                    hidden: { pathLength: 0, opacity: 0 },
+                    visible: {
+                        pathLength: 1,
+                        opacity: 1,
+                        transition: {
+                            pathLength: { duration, ease: 'linear' },
+                            opacity: { duration: 0.01 },
+                        }
+                    }
+                }}
+                style={{
+                    strokeWidth: 10,
+                    strokeLinecap: "round",
+                    fill: "transparent",
+                }}
+            />
+        </motion.svg>
+    )
+}
+
 function Game() {
     return (
-        <Container className="h-100">
-            <Col className="h-100 d-flex justify-content-center align-items-center">
-                <Row>
-                    
-                </Row>
-                <Row className="gap-3">
-                    <ReplayButton />
-                    <BingoButton />
-                    <NextButton />
-                </Row>
-            </Col>
-        </Container>
+        <Col className='h-100 d-flex flex-column justify-content-center align-items-center gap-3'>
+            <MusicNote size={200} duration={5} />
+            <ReplayButton />
+            <BingoButton />
+            <NextButton />
+        </Col>
     )
 }
 
