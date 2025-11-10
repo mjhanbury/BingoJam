@@ -1,6 +1,6 @@
 //#region Imports
 // React
-import { createContext, useEffect, useRef, useState } from 'react'
+import { createContext, useCallback, useEffect, useRef, useState } from 'react'
 
 // Styles
 import { Container } from "react-bootstrap";
@@ -10,6 +10,29 @@ import { faVolumeMute, faVolumeHigh, faStop, faPlay, faMusic } from '@fortawesom
 // Motion
 import { motion } from 'framer-motion'
 //#endregion Imports
+
+const songs = [
+    {
+        title: 'Frosty the Snowman',
+        artist: 'Jimmy Durante'
+    },
+    {
+        title: 'My Girl',
+        artist: 'The Temptations'
+    },
+    {
+        title: 'Shake it Off',
+        artist: 'Taylor Swift'
+    },
+    {
+        title: 'Twist and Shout',
+        artist: 'The Beatles'
+    },
+    {
+        title: 'Walking on Sunshine',
+        artist: 'Katrina and the Waves'
+    }
+]
 
 const ThemeButton = ({ muted, themeMuted }) => {
     const [playing, play] = useState(false);
@@ -85,8 +108,16 @@ function Controls({ children }) {
     const [muted, mute] = useState(true);
     const [themeMuted, muteTheme] = useState(false);
 
+    const [remaining, setRemaining] = useState(songs);
+    const [history, setHistory] = useState([]);
+    const next = useCallback(() => {
+        const index = Math.floor(Math.random() * remaining.length);
+        setHistory(i => [...i, remaining[index]]);
+        setRemaining(i => i.filter(j => j !== remaining[index]));
+    }, [remaining, history]);
+
     return (
-        <ControlsContext.Provider value={{ muted, muteTheme }}>
+        <ControlsContext.Provider value={{ muted, muteTheme, next, history }}>
             { children }
             <Container
                 style={{

@@ -1,19 +1,22 @@
+//#region Imports
+// React
 import React, { Fragment, useContext, useEffect, useRef, useState } from 'react'
+
+// Styles
 import { Container, Row, Col } from 'react-bootstrap';
 
+// Confetti
 import { useReward } from 'react-rewards';
 
+// Motion
 import { motion, spring } from 'framer-motion'
-import { Link, useNavigate } from 'react-router-dom';
-import { ControlsContext } from './Controls';
 
-const colors = [
-  'hsl(46, 47%, 24%)',
-  'hsl(38, 76%, 69%)',
-  'hsl(28, 83%, 65%)',
-  'hsl(19, 88%, 62%)',
-  'hsl(14, 63%, 28%)'
-];
+// Router
+import { Link, useNavigate } from 'react-router-dom';
+
+// Components
+import { ControlsContext } from './Controls';
+//#endregion Imports
 
 const Title = () => {
 	return (
@@ -25,15 +28,9 @@ const Title = () => {
 				initial={{ fontSize: '9rem', rotate: 5 }}
 				animate={{ fontSize: '10rem', rotate: -5 }}
 				transition={{ duration: 2, repeat: Infinity, repeatType: 'mirror' }}
-				style={{ WebkitTextStroke: '0.25rem white', fontWeight: 'bold' }}
+				style={{ WebkitTextStroke: '0.25rem white', fontWeight: 'bold', color: 'transparent' }}
 			>
-				<motion.span
-					initial={{ color: colors[0] }}
-					animate={{ color: colors }}
-					transition={{ duration: 30, repeat: Infinity, repeatType: 'mirror' }}
-				>
-					Jam!
-				</motion.span>
+				Jam!
 			</motion.h1>
 		</div>
 	)
@@ -53,7 +50,7 @@ const PlayButton = () => {
 			confetti.current.currentTime = 0;
 			confetti.current.play();
 			confetti.current.onended = () => {
-				navigate('/game');
+				navigate('/countdown');
 			};
 		}
 		reward();
@@ -61,7 +58,7 @@ const PlayButton = () => {
 
     return (
 		<Fragment>
-			<Link to={'/game'} onClick={play}>
+			<Link to={'/countdown'} onClick={play}>
 				<motion.button
 					whileHover={{ scale: 1.2, rotate: 0 }}
 					whileTap={{ scale: 0.8, rotate: 20 }}

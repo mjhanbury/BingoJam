@@ -8,6 +8,9 @@ import Game from "./Game"
 
 // Motion
 import { AnimatePresence } from "motion/react";
+import Countdown from "./Countdown";
+import Play from "./Play";
+import Summary from "./Summary";
 //#endregion Imports
 
 function AnimatedRoutes() {
@@ -17,7 +20,9 @@ function AnimatedRoutes() {
         <AnimatePresence>
             <Routes location={location} key={location.pathname}>
                 <Route path='/' element={<Lobby />} />
-                <Route path='/game' element={<Game />} />
+                <Route path='/countdown' element={<Countdown />} />
+                <Route path='/play/:duration' element={<Play />} />
+                <Route path='/summary' element={<Summary />} />
             </Routes>
         </AnimatePresence>
     )
