@@ -1,4 +1,4 @@
-import { motion, animate, useMotionValue, useTransform } from "motion/react"
+import { motion } from "motion/react"
 import { useContext, useEffect, useRef, useState } from "react"
 import { Container } from "react-bootstrap"
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,8 @@ function Countdown() {
     const [count, setCount] = useState(4);
     const navigate = useNavigate();
 
+    useEffect(() => muteTheme(true), [])
+    
     useEffect(() => {
         if (!count) {
             next();
@@ -22,7 +24,6 @@ function Countdown() {
             setCount(i => i - 1);
             boop.current.currentTime = 0;
             boop.current.play();
-            muteTheme(true);
         }, 1000);
 
         return () => clearInterval(interval);

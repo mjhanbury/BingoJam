@@ -1,6 +1,6 @@
 //#region Imports
 // React
-import { createContext, useCallback, useEffect, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 
 // Styles
 import { Container } from "react-bootstrap";
@@ -41,6 +41,8 @@ const ThemeButton = ({ muted, themeMuted }) => {
 
     useEffect(() => {
         if (theme.current) {
+            theme.current.volume = 0.5;
+
             if (playing) {
                 theme.current.currentTime = 0;
                 theme.current.play();
@@ -73,7 +75,7 @@ const ThemeButton = ({ muted, themeMuted }) => {
                 <FontAwesomeIcon icon={ faMusic } style={{ fontSize: '1rem' }} />
             </motion.button>
 
-            <audio ref={theme} src="./media/LobbyMusic.mp3" muted={muted || themeMuted} />
+            <audio ref={theme} src="./media/LobbyMusic.mp3" muted={muted || themeMuted} loop />
         </>
     )
 }
@@ -135,5 +137,6 @@ function Controls({ children }) {
         </ControlsContext.Provider>
     )
 }
+export const useControls = () => useContext(ControlsContext);
 
 export default Controls

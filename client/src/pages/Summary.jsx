@@ -1,10 +1,11 @@
-import { Container } from 'react-bootstrap'
+import { Container, Row } from 'react-bootstrap'
 import { motion } from 'motion/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRepeat, faBell, faForward } from '@fortawesome/free-solid-svg-icons'
+import { faRepeat, faBell, faForward, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
 import { useContext, useEffect } from 'react'
 import { ControlsContext } from './Controls'
+import { useCurtain } from './Curtain'
 
 const button = {
     width: 280,
@@ -30,16 +31,38 @@ const ReplayButton = () => {
             exit={{ opacity: 0, y: 20 }}
             whileHover={{ scale: 1.1, rotate: 0 }}
             whileTap={{ scale: 0.9, rotate: 5 }}
-            style={button}
-            onClick={() => { navigate('/play') }}
+            style={{ ...button, width: 130, marginRight: 8 }}
+            onClick={() => { navigate('/play/5') }}
         >
-            Replay
-            <FontAwesomeIcon icon={ faRepeat } style={{ fontSize: '1rem', marginLeft: '0.5rem' }} />
+            5 sec
+            <FontAwesomeIcon icon={ faRepeat } style={{ fontSize: '1rem' }} />
+        </motion.button>
+    )
+}
+
+const PlayMore = () => {
+    const navigate = useNavigate();
+
+    return (
+        <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0, transition: {
+                duration: 0.5,
+            }}}
+            exit={{ opacity: 0, y: 20 }}
+            whileHover={{ scale: 1.1, rotate: 0 }}
+            whileTap={{ scale: 0.9, rotate: 5 }}
+            style={{ ...button, width: 130, marginLeft: 8 }}
+            onClick={() => { navigate('/play/10') }}
+        >
+            10 sec
+            <FontAwesomeIcon icon={ faRepeat } style={{ fontSize: '1rem' }} />
         </motion.button>
     )
 }
 
 const BingoButton = () => {
+    const navigate = useNavigate();
     return (
         <>
             <motion.button
@@ -52,6 +75,7 @@ const BingoButton = () => {
                 whileHover={{ scale: 1.1, rotate: 0 }}
                 whileTap={{ scale: 0.9, rotate: 5 }}
                 style={button}
+                onClick={() => { navigate('/bingo') }}
             >
                 Bingo!
                 <FontAwesomeIcon icon={faBell} />
@@ -61,6 +85,8 @@ const BingoButton = () => {
 }
 
 const NextButton = () => {
+    const { navigateWithCurtain } = useCurtain();
+
     return (
         <>
             <motion.button
@@ -73,6 +99,7 @@ const NextButton = () => {
                 whileHover={{ scale: 1.1, rotate: 0 }}
                 whileTap={{ scale: 0.9, rotate: 5 }}
                 style={button}
+                onClick={() => { navigateWithCurtain('/countdown') }}
             >
                 Next
                 <FontAwesomeIcon icon={ faForward } style={{ fontSize: '1rem', marginLeft: '0.5rem' }} />
@@ -90,7 +117,10 @@ function Summary() {
 
     return (
         <Container className='h-100 d-flex flex-column justify-content-center align-items-center gap-3'>
-            <ReplayButton /> {/* Add a play more button */}
+            <Row>
+                <ReplayButton />
+                <PlayMore />
+            </Row>
             <BingoButton />
             <NextButton />
         </Container>

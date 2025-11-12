@@ -1,7 +1,7 @@
 //#region Imports
 // Styles
-import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import './styles.scss'
 import { Container } from 'react-bootstrap'
 
 // Motion
@@ -13,6 +13,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 // Components
 import AnimatedRoutes from './pages/AnimatedRoutes'
 import Controls from './pages/Controls'
+import { Curtain } from './pages/Curtain'
 //#endregion Imports
 
 const Background = ({ children }) => {
@@ -40,13 +41,15 @@ const Background = ({ children }) => {
 
 function App() { 
 	return (
-		<Background>
-			<Controls>
-				<Router>
-					<AnimatedRoutes />
-				</Router>
-			</Controls>
-		</Background>
+		<Controls>
+			<Background>
+					<Router>
+						<Curtain>
+							<AnimatedRoutes />
+						</Curtain>
+					</Router>
+			</Background>
+		</Controls>
 	) 
 }
 

@@ -1,21 +1,22 @@
 //#region Imports
 // React
-import React, { Fragment, useContext, useEffect, useRef, useState } from 'react'
+import { Fragment, useContext, useRef } from 'react'
 
 // Styles
-import { Container, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 
 // Confetti
 import { useReward } from 'react-rewards';
 
 // Motion
-import { motion, spring } from 'framer-motion'
+import { easeInOut, motion, spring } from 'framer-motion'
 
 // Router
 import { Link, useNavigate } from 'react-router-dom';
 
 // Components
-import { ControlsContext } from './Controls';
+import { useControls } from './Controls';
+import { useCurtain } from './Curtain';
 //#endregion Imports
 
 const Title = () => {
@@ -37,20 +38,20 @@ const Title = () => {
 }
 
 const PlayButton = () => {
-	const { muted } = useContext(ControlsContext);
     const { reward, isAnimating } = useReward('rewardId', 'confetti');
-
-	const navigate = useNavigate();
+	const { muted } = useControls();
+	const { navigateWithCurtain } = useCurtain();
 
     const confetti = useRef(null);
-    const play = (e) => {
+
+	const play = (e) => {
 		e.preventDefault();
 
 		if (confetti.current) {
 			confetti.current.currentTime = 0;
 			confetti.current.play();
 			confetti.current.onended = () => {
-				navigate('/countdown');
+				navigateWithCurtain('/countdown');
 			};
 		}
 		reward();
@@ -58,25 +59,24 @@ const PlayButton = () => {
 
     return (
 		<Fragment>
-			<Link to={'/countdown'} onClick={play}>
-				<motion.button
-					whileHover={{ scale: 1.2, rotate: 0 }}
-					whileTap={{ scale: 0.8, rotate: 20 }}
-					style={{
-						width: 200,
-						height: 100,
-						backgroundColor: 'white',
-						borderRadius: 5,
-						border: 'none',
-						fontSize: '2rem',
-						fontWeight: 'bold',
-					}}
-					disabled={isAnimating}
-				>
-					<span id="rewardId" />
-					Play
-				</motion.button>
-			</Link>
+			<motion.button
+				whileHover={{ scale: 1.2, rotate: 0 }}
+				whileTap={{ scale: 0.8, rotate: 20 }}
+				style={{
+					width: 200,
+					height: 100,
+					backgroundColor: 'white',
+					borderRadius: 5,
+					border: 'none',
+					fontSize: '2rem',
+					fontWeight: 'bold',
+				}}
+				disabled={isAnimating}
+				onClick={play}
+			>
+				<span id="rewardId" />
+				Play
+			</motion.button>
 			<audio ref={confetti} src="./media/Confetti.mp3" muted={muted} />
 		</Fragment>
     )
