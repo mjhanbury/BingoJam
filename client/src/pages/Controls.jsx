@@ -1,11 +1,11 @@
 //#region Imports
 // React
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, Fragment, useCallback, useContext, useEffect, useRef, useState } from 'react'
 
 // Styles
 import { Container } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faVolumeMute, faVolumeHigh, faStop, faPlay, faMusic } from '@fortawesome/free-solid-svg-icons'
+import { faVolumeMute, faVolumeHigh, faMusic } from '@fortawesome/free-solid-svg-icons'
 
 // Motion
 import { motion } from 'framer-motion'
@@ -53,55 +53,52 @@ const ThemeButton = ({ muted, themeMuted }) => {
     }, [playing]);
 
     return (
-        <>
-            <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    padding: '1rem 1rem',
-                    border: 'none',
-                    borderRadius: '2rem',
-                    color: playing ? 'black' : 'white',
-                    backgroundColor: playing ? 'white' : 'rgba(255,255,255,0.25)',
-                    fontSize: '1rem',
-                    fontStyle: 'italic'
+        <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '0.5rem' 
+        }}>
+            <motion.button 
+                animate={ playing ? { opacity: 1 } : { opacity: 0.5 } }
+                whileHover={{ scale: 0.9 }} 
+                whileTap={{ scale: 1.1 }} 
+                style={{ 
+                    background: 'none', 
+                    border: 'none', 
+                    padding: 0 
                 }}
-                onClick={() => play(!playing)}
-                >
-                <FontAwesomeIcon icon={ faMusic } style={{ fontSize: '1rem' }} />
+                onClick={() => play(i => !i)}
+            >
+                <FontAwesomeIcon icon={faMusic} className={'fs-1 text-light'} />
             </motion.button>
-
+            <p className={'m-0 text-light text-center'}>Theme</p>
             <audio ref={theme} src="./media/LobbyMusic.mp3" muted={muted || themeMuted} loop />
-        </>
+        </div>
     )
 }
 
 const MuteButton = ({ mute, muted }) => {
     return (
-        <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                gap: '0.5rem',
-                padding: '1rem 1rem',
-                border: 'none',
-                borderRadius: '2rem',
-                color: !muted ? 'black' : 'white',
-                backgroundColor: !muted ? 'white' : 'rgba(255,255,255,0.25)',
-                fontSize: '1rem',
-                fontStyle: 'italic'
-            }}
-            onClick={() => mute(!muted)}
-        >
-            <FontAwesomeIcon icon={muted ? faVolumeMute : faVolumeHigh} style={{ fontSize: '1rem' }} />
-        </motion.button>
+        <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '0.5rem' 
+        }}>
+            <motion.button 
+                animate={ muted ? { opacity: 0.5 } : { opacity: 1 } }
+                whileHover={{ scale: 0.9 }} 
+                whileTap={{ scale: 1.1 }} 
+                style={{ 
+                    background: 'none', 
+                    border: 'none', 
+                    padding: 0 
+                }}
+                onClick={() => mute(i => !i)}
+            >
+                <FontAwesomeIcon icon={ muted ? faVolumeMute : faVolumeHigh } className={'fs-1 text-light'} />
+            </motion.button>
+            <p className={'m-0 text-light text-center'}>Mute</p>
+        </div>
     )
 }
 
@@ -121,16 +118,7 @@ function Controls({ children }) {
     return (
         <ControlsContext.Provider value={{ muted, muteTheme, next, history }}>
             { children }
-            <Container
-                style={{
-                    position: 'absolute',
-                    bottom: '2rem',
-                    left: '2rem',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: '1rem'
-                }}
-                >
+            <Container className={'position-absolute px-5 py-4 left-0 bottom-0 d-flex flex-row gap-4'}>
                 <ThemeButton muted={muted} themeMuted={themeMuted} />
                 <MuteButton mute={mute} muted={muted} />
             </Container>

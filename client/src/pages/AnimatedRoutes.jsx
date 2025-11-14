@@ -22,7 +22,7 @@ function AnimatedRoutes() {
             <Routes location={location} key={location.pathname}>
                 <Route path='/' element={<Lobby />} />
                 <Route path='/countdown' element={<Countdown />} />
-                <Route path='/play/:duration' element={<Play />} />
+                <Route path='/play' element={<Play />} />
                 <Route path='/summary' element={<Summary />} />
                 <Route path='/bingo' element={<Bingo />} />
             </Routes>

@@ -1,7 +1,7 @@
 import { Container, Row } from 'react-bootstrap'
 import { motion } from 'motion/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRepeat, faBell, faForward, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faBell, faForward, faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
 import { useContext, useEffect } from 'react'
 import { ControlsContext } from './Controls'
@@ -35,7 +35,7 @@ const ReplayButton = () => {
             onClick={() => { navigate('/play/5') }}
         >
             5 sec
-            <FontAwesomeIcon icon={ faRepeat } style={{ fontSize: '1rem' }} />
+            <FontAwesomeIcon icon={ faArrowRotateLeft } style={{ fontSize: '1rem' }} />
         </motion.button>
     )
 }
@@ -56,7 +56,7 @@ const PlayMore = () => {
             onClick={() => { navigate('/play/10') }}
         >
             10 sec
-            <FontAwesomeIcon icon={ faRepeat } style={{ fontSize: '1rem' }} />
+            <FontAwesomeIcon icon={ faArrowRotateLeft } style={{ fontSize: '1rem' }} />
         </motion.button>
     )
 }

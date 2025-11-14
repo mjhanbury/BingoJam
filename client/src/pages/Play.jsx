@@ -1,10 +1,10 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { ControlsContext } from './Controls'
 import { motion } from 'motion/react'
 import { Container } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom';
 
-const NoteSVG = ({ size, duration }) => {
+const SVG = ({ size, duration }) => {
     return (
         <motion.svg initial={'hidden'} animate={'visible'} exit={{ opacity: 0 }} height={size} width={size} style={{ marginBottom: 24 }}>
             <motion.circle
@@ -119,13 +119,11 @@ const NoteSVG = ({ size, duration }) => {
 
 function Play() {
     const navigate = useNavigate();
-    const { duration } = useParams();
-    const size = 400;
 
     const { muted, muteTheme, history } = useContext(ControlsContext);
     const controls = useRef();
 
-    useEffect(() => {
+    const play = useCallback((duration) => {
         if (!controls.current) return;
 
         muteTheme(true);
@@ -134,7 +132,6 @@ function Play() {
 
         const interval = setInterval(() => {
             controls.current.pause();
-            navigate('/summary');
         }, duration * 1000);
 
         return () => clearInterval(interval);
@@ -142,7 +139,7 @@ function Play() {
 
     return (
         <Container className='h-100 d-flex justify-content-center align-items-center'>
-            <NoteSVG size={size} duration={duration} />
+            <SVG size={400} duration={duration} />
             <audio 
                 ref={controls} 
                 src={`/media/songs/${history[history.length - 1].title.replace(/\s/g, '')}.mp3`} 

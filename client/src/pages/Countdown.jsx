@@ -17,7 +17,7 @@ function Countdown() {
     useEffect(() => {
         if (!count) {
             next();
-            navigate('/play/5');
+            navigate('/play');
         };
 
         const interval = setInterval(() => {
