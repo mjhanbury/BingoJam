@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
-import { ControlsContext } from "./Controls";
 
 const SongCard = ({ order, title, artist }) => {
     return (

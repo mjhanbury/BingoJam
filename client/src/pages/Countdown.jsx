@@ -1,22 +1,27 @@
 import { motion } from "motion/react"
-import { useContext, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Container } from "react-bootstrap"
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ControlsContext } from "./Controls";
+import { toggleTheme, playNext, showControls } from "../store/slices/audioSlice";
 
 function Countdown() {
-    const { muted, muteTheme, next } = useContext(ControlsContext);
+    const { muted } = useSelector(s => s.audio);
+    const dispatch = useDispatch();
 
     const boop = useRef();
 
     const [count, setCount] = useState(4);
     const navigate = useNavigate();
 
-    useEffect(() => muteTheme(true), [])
+    useEffect(() => {
+        dispatch(toggleTheme(false));
+        dispatch(showControls(false));
+    }, []);
     
     useEffect(() => {
         if (!count) {
-            next();
+            dispatch(playNext());
             navigate('/play');
         };
 

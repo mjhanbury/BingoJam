@@ -1,6 +1,6 @@
 //#region Imports
 // React
-import { Fragment, useContext, useRef } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
 
 // Styles
 import { Row, Col } from 'react-bootstrap';
@@ -9,14 +9,12 @@ import { Row, Col } from 'react-bootstrap';
 import { useReward } from 'react-rewards';
 
 // Motion
-import { easeInOut, motion, spring } from 'framer-motion'
-
-// Router
-import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion'
 
 // Components
-import { useControls } from './Controls';
 import { useCurtain } from './Curtain';
+import { useDispatch, useSelector } from 'react-redux';
+import { reset, showControls, toggleTheme } from '../store/slices/audioSlice';
 //#endregion Imports
 
 const Title = () => {
@@ -38,11 +36,19 @@ const Title = () => {
 }
 
 const PlayButton = () => {
-    const { reward, isAnimating } = useReward('rewardId', 'confetti');
-	const { muted } = useControls();
+	const muted = useSelector(s => s.audio.muted);
+	const dispatch = useDispatch();
+
+	const { reward, isAnimating } = useReward('rewardId', 'confetti');
+    const confetti = useRef(null);
+
 	const { navigateWithCurtain } = useCurtain();
 
-    const confetti = useRef(null);
+	useEffect(() => { 
+		dispatch(reset());
+		dispatch(showControls(false));
+		dispatch(toggleTheme(true));
+	}, []);
 
 	const play = (e) => {
 		e.preventDefault();

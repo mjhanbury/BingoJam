@@ -5,7 +5,7 @@ import './styles.scss'
 import { Container } from 'react-bootstrap'
 
 // Motion
-import { motion } from "motion/react"
+import { motion } from 'motion/react'
 
 // Router
 import { BrowserRouter as Router } from 'react-router-dom'
@@ -14,6 +14,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import AnimatedRoutes from './pages/AnimatedRoutes'
 import Controls from './pages/Controls'
 import { Curtain } from './pages/Curtain'
+import Summary from './pages/Summary'
 //#endregion Imports
 
 const Background = ({ children }) => {
@@ -41,15 +42,15 @@ const Background = ({ children }) => {
 
 function App() { 
 	return (
-		<Controls>
-			<Background>
-					<Router>
-						<Curtain>
-							<AnimatedRoutes />
-						</Curtain>
-					</Router>
-			</Background>
-		</Controls>
+		<Background>
+			<Router>
+				<Curtain>
+					<Summary />
+					<AnimatedRoutes />
+					<Controls />
+				</Curtain>
+			</Router>
+		</Background>
 	) 
 }
 

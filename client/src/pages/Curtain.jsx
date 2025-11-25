@@ -1,11 +1,11 @@
-import { delay, easeIn, easeInOut, motion, useAnimate } from 'motion/react'
 import { createContext, useCallback, useContext, useRef } from 'react'
-import { ControlsContext } from './Controls';
+import { delay, easeInOut, motion, useAnimate } from 'motion/react'
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export const CurtainContext = createContext(null);
 export const Curtain = ({ children }) => {
-	const { muted } = useContext(ControlsContext);
+	const muted = useSelector(s => s.audio.muted);
 	const whoosh = useRef();
 
 	const [scope, animate] = useAnimate();

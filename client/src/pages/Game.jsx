@@ -9,9 +9,6 @@ import { motion } from 'framer-motion'
 import { Col, Row, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell, faForward, faRepeat } from "@fortawesome/free-solid-svg-icons";
-
-// Components
-import { ControlsContext } from "./Controls";
 //#endregion Imports
 
 const button = {

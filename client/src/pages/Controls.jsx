@@ -3,128 +3,89 @@
 import { createContext, Fragment, useCallback, useContext, useEffect, useRef, useState } from 'react'
 
 // Styles
-import { Container } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faVolumeMute, faVolumeHigh, faMusic } from '@fortawesome/free-solid-svg-icons'
+import { faVolumeMute, faVolumeHigh, faMusic, faArrowRotateLeft, faBell, faForward, faRectangleXmark, fa5 } from '@fortawesome/free-solid-svg-icons'
 
 // Motion
-import { motion } from 'framer-motion'
+import { motion, stagger, useAnimate } from 'framer-motion'
+import { useNavigate } from 'react-router-dom';
+import { BingoButton, MuteButton, NextButton, PlayPauseButton, QuitButton, ReplayButton } from '../Buttons';
+import { useSelector } from 'react-redux';
 //#endregion Imports
 
-const songs = [
-    {
-        title: 'Frosty the Snowman',
-        artist: 'Jimmy Durante'
-    },
-    {
-        title: 'My Girl',
-        artist: 'The Temptations'
-    },
-    {
-        title: 'Shake it Off',
-        artist: 'Taylor Swift'
-    },
-    {
-        title: 'Twist and Shout',
-        artist: 'The Beatles'
-    },
-    {
-        title: 'Walking on Sunshine',
-        artist: 'Katrina and the Waves'
-    }
-]
+/*
+const play = useCallback((duration) => {
+    if (!controls.current) return;
 
-const ThemeButton = ({ muted, themeMuted }) => {
-    const [playing, play] = useState(false);
+    muteTheme(true);
+    controls.current.currentTime = 0;
+    controls.current.play();
 
- 	const theme = useRef(null);
+    const interval = setInterval(() => {
+        controls.current.pause();
+    }, duration * 1000);
+
+    return () => clearInterval(interval);
+}, []);
+*/
+
+function Controls() {
+    const { muted, theme, path, controlsVisible, playing } = useSelector(s => s.audio);
+    const themeRef = useRef();
+    const songRef = useRef();
+
+    const [scope, animate] = useAnimate();
 
     useEffect(() => {
-        if (theme.current) {
-            theme.current.volume = 0.5;
+        if (themeRef.current && themeRef.current.currentTime === 0 && !muted) {
+            themeRef.current.volume = 0.25;
+            themeRef.current.currentTime = 0;
+            themeRef.current.play();
+        }
+    }, [muted]);
 
-            if (playing) {
-                theme.current.currentTime = 0;
-                theme.current.play();
-            } else {
-                theme.current.pause();
-            }
+    useEffect(() => {
+        if (controlsVisible) {
+            animate('button', { y: 0 }, { delay: stagger(0.05) })
+        }
+        else {
+            animate('button', { y: 200 }, { delay: stagger(0.05) })
+        }
+    }, [controlsVisible]);
+
+    useEffect(() => {
+        if (!songRef.current) return;
+
+        if (playing) {
+            songRef.current.currentTime = 0;
+            songRef.current.play();
+        }
+        else {
+            songRef.current.pause();
         }
     }, [playing]);
 
     return (
-        <div style={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            gap: '0.5rem' 
-        }}>
-            <motion.button 
-                animate={ playing ? { opacity: 1 } : { opacity: 0.5 } }
-                whileHover={{ scale: 0.9 }} 
-                whileTap={{ scale: 1.1 }} 
-                style={{ 
-                    background: 'none', 
-                    border: 'none', 
-                    padding: 0 
-                }}
-                onClick={() => play(i => !i)}
-            >
-                <FontAwesomeIcon icon={faMusic} className={'fs-1 text-light'} />
-            </motion.button>
-            <p className={'m-0 text-light text-center'}>Theme</p>
-            <audio ref={theme} src="./media/LobbyMusic.mp3" muted={muted || themeMuted} loop />
-        </div>
+        <Container className={'position-absolute p-5 left-0 bottom-0 mw-100'}>
+            <Row>
+                <Col xs={2} md={2} className={'d-flex flex-row justify-content-start gap-4'}>
+                    <MuteButton />
+                </Col>
+                <Col xs={8} md={8} className={'d-flex flex-row justify-content-center gap-4'} ref={scope}>
+                    <ReplayButton />
+                    <PlayPauseButton />
+                    <BingoButton />
+                    <NextButton />
+                </Col>
+                <Col xs={2} md={2} className={'d-flex flex-row justify-content-end gap-4'}>
+                    <QuitButton />
+                </Col>
+            </Row>
+            <audio ref={themeRef} src="./media/LobbyMusic.mp3" muted={muted || !theme} loop />
+            <audio ref={songRef} src={path} muted={muted} loop />
+        </Container>
     )
 }
-
-const MuteButton = ({ mute, muted }) => {
-    return (
-        <div style={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            gap: '0.5rem' 
-        }}>
-            <motion.button 
-                animate={ muted ? { opacity: 0.5 } : { opacity: 1 } }
-                whileHover={{ scale: 0.9 }} 
-                whileTap={{ scale: 1.1 }} 
-                style={{ 
-                    background: 'none', 
-                    border: 'none', 
-                    padding: 0 
-                }}
-                onClick={() => mute(i => !i)}
-            >
-                <FontAwesomeIcon icon={ muted ? faVolumeMute : faVolumeHigh } className={'fs-1 text-light'} />
-            </motion.button>
-            <p className={'m-0 text-light text-center'}>Mute</p>
-        </div>
-    )
-}
-
-export const ControlsContext = createContext(null);
-function Controls({ children }) {
-    const [muted, mute] = useState(true);
-    const [themeMuted, muteTheme] = useState(false);
-
-    const [remaining, setRemaining] = useState(songs);
-    const [history, setHistory] = useState([]);
-    const next = useCallback(() => {
-        const index = Math.floor(Math.random() * remaining.length);
-        setHistory(i => [...i, remaining[index]]);
-        setRemaining(i => i.filter(j => j !== remaining[index]));
-    }, [remaining, history]);
-
-    return (
-        <ControlsContext.Provider value={{ muted, muteTheme, next, history }}>
-            { children }
-            <Container className={'position-absolute px-5 py-4 left-0 bottom-0 d-flex flex-row gap-4'}>
-                <ThemeButton muted={muted} themeMuted={themeMuted} />
-                <MuteButton mute={mute} muted={muted} />
-            </Container>
-        </ControlsContext.Provider>
-    )
-}
-export const useControls = () => useContext(ControlsContext);
 
 export default Controls

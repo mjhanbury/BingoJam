@@ -1,12 +1,30 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { ControlsContext } from './Controls'
 import { motion } from 'motion/react'
 import { Container } from 'react-bootstrap'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { showControls, togglePlay, toggleTheme } from '../store/slices/audioSlice';
+import { useEffect } from 'react';
 
-const SVG = ({ size, duration }) => {
+const SVG = () => {
+    const { current, counter } = useSelector(s => s.audio);
+    const dispatch = useDispatch();
+    const size = 400;
+
+    useEffect(() => { dispatch(togglePlay(true)) }, [counter]);
+
     return (
-        <motion.svg initial={'hidden'} animate={'visible'} exit={{ opacity: 0 }} height={size} width={size} style={{ marginBottom: 24 }}>
+        <motion.svg 
+            key={`svg-${counter}`} 
+            initial={'hidden'} 
+            animate={'visible'} 
+            onAnimationComplete={() => {
+                dispatch(togglePlay(false));
+                dispatch(showControls(true));
+                dispatch(toggleTheme(true));
+            }}
+            height={size} 
+            width={size} 
+            style={{ marginBottom: 24 }}
+        >
             <motion.circle
                 cx={size / 6 + 20} cy={size - size / 6 - 20} r={size / 6}
                 stroke={'white'}
@@ -16,7 +34,7 @@ const SVG = ({ size, duration }) => {
                         pathLength: 1,
                         opacity: 1,
                         transition: {
-                            pathLength: { duration, ease: 'linear' },
+                            pathLength: { duration: current.duration, ease: 'linear' },
                             opacity: { duration: 0.01 },
                         }
                     }
@@ -26,7 +44,7 @@ const SVG = ({ size, duration }) => {
                     strokeLinecap: "round",
                     fill: "transparent",
                 }}
-                />
+            />
             <motion.circle
                 cx={size - size / 6 - 20} cy={size - size / 6 - 20} r={size / 6}
                 stroke={'white'}
@@ -36,7 +54,7 @@ const SVG = ({ size, duration }) => {
                         pathLength: 1,
                         opacity: 1,
                         transition: {
-                            pathLength: { duration, ease: 'linear' },
+                            pathLength: { duration: current.duration, ease: 'linear' },
                             opacity: { duration: 0.01 },
                         }
                     }
@@ -48,7 +66,7 @@ const SVG = ({ size, duration }) => {
                     scaleY: -1,
                     transformOrigin: 'center'
                 }}
-                />
+            />
             <motion.line
                 x1={size / 3 + 20} y1={20}
                 x2={size / 3 + 20} y2={size - size / 6 - 20}
@@ -59,7 +77,7 @@ const SVG = ({ size, duration }) => {
                         pathLength: 1,
                         opacity: 1,
                         transition: {
-                            pathLength: { duration, ease: 'linear' },
+                            pathLength: { duration: current.duration, ease: 'linear' },
                             opacity: { duration: 0.01 },
                         }
                     }
@@ -69,7 +87,7 @@ const SVG = ({ size, duration }) => {
                     strokeLinecap: "round",
                     fill: "transparent",
                 }}
-                />
+            />
             <motion.line
                 x1={size / 3 + 20} y1={20}
                 x2={size - 20} y2={20}
@@ -80,7 +98,7 @@ const SVG = ({ size, duration }) => {
                         pathLength: 1,
                         opacity: 1,
                         transition: {
-                            pathLength: { duration, ease: 'linear' },
+                            pathLength: { duration: current.duration, ease: 'linear' },
                             opacity: { duration: 0.01 },
                         }
                     }
@@ -90,8 +108,7 @@ const SVG = ({ size, duration }) => {
                     strokeLinecap: "round",
                     fill: "transparent",
                 }}
-                />
-
+            />
             <motion.line
                 x1={size - 20} y1={20}
                 x2={size - 20} y2={size - size / 6 - 20}
@@ -102,7 +119,7 @@ const SVG = ({ size, duration }) => {
                         pathLength: 1,
                         opacity: 1,
                         transition: {
-                            pathLength: { duration, ease: 'linear' },
+                            pathLength: { duration: current.duration, ease: 'linear' },
                             opacity: { duration: 0.01 },
                         }
                     }
@@ -112,39 +129,15 @@ const SVG = ({ size, duration }) => {
                     strokeLinecap: "round",
                     fill: "transparent",
                 }}
-                />
+            />
         </motion.svg>
     )
 }
 
 function Play() {
-    const navigate = useNavigate();
-
-    const { muted, muteTheme, history } = useContext(ControlsContext);
-    const controls = useRef();
-
-    const play = useCallback((duration) => {
-        if (!controls.current) return;
-
-        muteTheme(true);
-        controls.current.currentTime = 0;
-        controls.current.play();
-
-        const interval = setInterval(() => {
-            controls.current.pause();
-        }, duration * 1000);
-
-        return () => clearInterval(interval);
-    }, []);
-
     return (
         <Container className='h-100 d-flex justify-content-center align-items-center'>
-            <SVG size={400} duration={duration} />
-            <audio 
-                ref={controls} 
-                src={`/media/songs/${history[history.length - 1].title.replace(/\s/g, '')}.mp3`} 
-                muted={muted} 
-            />
+            <SVG />
         </Container>
     )
 }

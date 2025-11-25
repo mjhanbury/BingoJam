@@ -1,129 +1,158 @@
-import { Container, Row } from 'react-bootstrap'
-import { motion } from 'motion/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBell, faForward, faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons'
-import { useNavigate } from 'react-router-dom'
-import { useContext, useEffect } from 'react'
-import { ControlsContext } from './Controls'
-import { useCurtain } from './Curtain'
+import { AnimatePresence } from "motion/react";
+import { useDispatch, useSelector } from "react-redux"
+import { motion } from 'framer-motion'
+import { previewSong, toggleSummary, toggleTheme } from "../store/slices/audioSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay, faPlayCircle, faStopCircle, faTimes, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { Col, Row } from "react-bootstrap";
+import { useEffect, useRef, useState } from "react";
 
-const button = {
-    width: 280,
-    height: 50,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-    border: '1px white solid',
-    borderRadius: 25,
-    fontSize: '1rem',
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center'
-}
-
-const ReplayButton = () => {
-    const navigate = useNavigate();
+const Header = () => {
+    const dispatch = useDispatch();
 
     return (
-        <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0, transition: {
-                duration: 0.5,
-            }}}
-            exit={{ opacity: 0, y: 20 }}
-            whileHover={{ scale: 1.1, rotate: 0 }}
-            whileTap={{ scale: 0.9, rotate: 5 }}
-            style={{ ...button, width: 130, marginRight: 8 }}
-            onClick={() => { navigate('/play/5') }}
+        <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0 }}
+            className={'w-50 bg-transparent p-0 text-light'}
+            style={{
+                maxWidth: '600px'
+            }}
         >
-            5 sec
-            <FontAwesomeIcon icon={ faArrowRotateLeft } style={{ fontSize: '1rem' }} />
-        </motion.button>
+            <Row>
+                <Col md={10} className={'d-flex justify-content-start align-items-center fs-5'}>
+                    Played Songs
+                </Col>
+                <Col md={2} className={'d-flex justify-content-end align-items-center fs-2'}>
+                    <button 
+                        className={'border-0 bg-transparent p-0 text-light'}
+                        onClick={() => {
+                            dispatch(toggleTheme(true));
+                            dispatch(toggleSummary(false));
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faTimesCircle} />
+                    </button>
+                </Col>
+            </Row>
+        </motion.div>
     )
 }
 
-const PlayMore = () => {
-    const navigate = useNavigate();
+const Card = ({ song, delay, order }) => {
+    const { muted, preview } = useSelector(s => s.audio);
+    const songRef = useRef();
+    const [playing, play] = useState(false);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (preview !== song.title) {
+            play(false);
+        }
+    }, [preview]);
+
+    useEffect(() => {
+        if (!songRef.current) return;
+
+        if (playing) {
+            songRef.current.currentTime = 0;
+            songRef.current.play();
+        }
+        else {
+            songRef.current.pause();
+        }
+    }, [playing])
 
     return (
-        <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0, transition: {
-                duration: 0.5,
-            }}}
-            exit={{ opacity: 0, y: 20 }}
-            whileHover={{ scale: 1.1, rotate: 0 }}
-            whileTap={{ scale: 0.9, rotate: 5 }}
-            style={{ ...button, width: 130, marginLeft: 8 }}
-            onClick={() => { navigate('/play/10') }}
+        <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0 }}
+            transition={{ delay }}
+            className={'w-50 bg-light rounded p-4'}
+            style={{
+                maxWidth: '600px'
+            }}
         >
-            10 sec
-            <FontAwesomeIcon icon={ faArrowRotateLeft } style={{ fontSize: '1rem' }} />
-        </motion.button>
-    )
-}
-
-const BingoButton = () => {
-    const navigate = useNavigate();
-    return (
-        <>
-            <motion.button
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0, transition: {
-                    duration: 0.5,
-                    delay: 0.1
-                }}}
-                exit={{ opacity: 0, y: 20 }}
-                whileHover={{ scale: 1.1, rotate: 0 }}
-                whileTap={{ scale: 0.9, rotate: 5 }}
-                style={button}
-                onClick={() => { navigate('/bingo') }}
-            >
-                Bingo!
-                <FontAwesomeIcon icon={faBell} />
-            </motion.button>
-        </>
-    )
-}
-
-const NextButton = () => {
-    const { navigateWithCurtain } = useCurtain();
-
-    return (
-        <>
-            <motion.button
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0, transition: {
-                    duration: 0.5,
-                    delay: 0.2
-                }}}
-                exit={{ opacity: 0, y: 20 }}
-                whileHover={{ scale: 1.1, rotate: 0 }}
-                whileTap={{ scale: 0.9, rotate: 5 }}
-                style={button}
-                onClick={() => { navigateWithCurtain('/countdown') }}
-            >
-                Next
-                <FontAwesomeIcon icon={ faForward } style={{ fontSize: '1rem', marginLeft: '0.5rem' }} />
-            </motion.button>
-        </>
+            <Row>
+                <Col md={2} className={'d-flex justify-content-center align-items-center'} style={{ color: 'hsl(0,0%,50%)' }}>
+                    {order}
+                </Col>
+                <Col md={8}>
+                    <Row>{song.title}</Row>
+                    <Row style={{ color: 'hsl(0,0%,50%)' }}>{song.artist}</Row>
+                </Col>
+                <Col md={2} className={'d-flex justify-content-center align-items-center fs-2'}>
+                    <button 
+                        className={'border-0 bg-transparent p-0'}
+                        onClick={() => {
+                            if (playing) {
+                                dispatch(previewSong(null));
+                                dispatch(toggleTheme(true));
+                            }
+                            else {
+                                dispatch(previewSong(song.title));
+                                dispatch(toggleTheme(false));
+                            }
+                            play(p => !p);
+                        }}
+                    >
+                        <FontAwesomeIcon icon={playing ? faStopCircle : faPlayCircle} />
+                    </button>
+                </Col>
+                <audio ref={songRef} src={song.path} muted={muted} loop />
+            </Row>
+        </motion.div>
     )
 }
 
 function Summary() {
-    const { muteTheme } = useContext(ControlsContext);
-
-    useEffect(() => {
-        muteTheme(false);
-    }, []);
+    const { summaryVisible, played } = useSelector(s => s.audio);
+    const dispatch = useDispatch();
 
     return (
-        <Container className='h-100 d-flex flex-column justify-content-center align-items-center gap-3'>
-            <Row>
-                <ReplayButton />
-                <PlayMore />
-            </Row>
-            <BingoButton />
-            <NextButton />
-        </Container>
+        <AnimatePresence initial={false}>
+            {summaryVisible ? (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    style={{
+                        position: 'absolute',
+                        height: window.innerHeight,
+                        width: window.innerWidth,
+                        top: 0,
+                        left: 0,
+                        background: 'hsla(0,0%,0%,50%)',
+                        zIndex: 1000,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '1rem'
+                    }}
+                >
+                    <Header />
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'start',
+                        alignItems: 'center',
+                        gap: '1rem',
+                        maxHeight: '50vh',
+                        width: '100vw',
+                        overflow: 'auto'
+                    }}>
+                        {
+                            played.map((song, i) => (
+                                <Card key={`song-card-${i}`} song={song} delay={i/25} order={i+1} />
+                            ))
+                        }
+                    </div>
+                </motion.div>
+            ) : null}
+        </AnimatePresence>
     )
 }
 
