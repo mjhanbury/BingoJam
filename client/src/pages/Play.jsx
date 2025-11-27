@@ -5,7 +5,7 @@ import { showControls, togglePlay, toggleTheme } from '../store/slices/audioSlic
 import { useEffect } from 'react';
 
 const SVG = () => {
-    const { current, counter } = useSelector(s => s.audio);
+    const { counter, duration } = useSelector(s => s.audio);
     const dispatch = useDispatch();
     const size = 400;
 
@@ -34,7 +34,7 @@ const SVG = () => {
                         pathLength: 1,
                         opacity: 1,
                         transition: {
-                            pathLength: { duration: current.duration, ease: 'linear' },
+                            pathLength: { duration, ease: 'linear' },
                             opacity: { duration: 0.01 },
                         }
                     }
@@ -54,7 +54,7 @@ const SVG = () => {
                         pathLength: 1,
                         opacity: 1,
                         transition: {
-                            pathLength: { duration: current.duration, ease: 'linear' },
+                            pathLength: { duration, ease: 'linear' },
                             opacity: { duration: 0.01 },
                         }
                     }
@@ -77,7 +77,7 @@ const SVG = () => {
                         pathLength: 1,
                         opacity: 1,
                         transition: {
-                            pathLength: { duration: current.duration, ease: 'linear' },
+                            pathLength: { duration, ease: 'linear' },
                             opacity: { duration: 0.01 },
                         }
                     }
@@ -98,7 +98,7 @@ const SVG = () => {
                         pathLength: 1,
                         opacity: 1,
                         transition: {
-                            pathLength: { duration: current.duration, ease: 'linear' },
+                            pathLength: { duration, ease: 'linear' },
                             opacity: { duration: 0.01 },
                         }
                     }
@@ -119,7 +119,7 @@ const SVG = () => {
                         pathLength: 1,
                         opacity: 1,
                         transition: {
-                            pathLength: { duration: current.duration, ease: 'linear' },
+                            pathLength: { duration, ease: 'linear' },
                             opacity: { duration: 0.01 },
                         }
                     }
