@@ -10,7 +10,7 @@ export const audioSlice = createSlice({
         theme: true,
         current: null,
         path: null,
-        duration: 5,
+        duration: 20,
         controlsVisible: false,
         summaryVisible: false,
         played: [],
