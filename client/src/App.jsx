@@ -43,7 +43,7 @@ const Background = ({ children }) => {
 function App() { 
 	return (
 		<Background>
-			<Router>
+			<Router basename={'/BingoJam'}>
 				<Curtain>
 					<Summary />
 					<AnimatedRoutes />
