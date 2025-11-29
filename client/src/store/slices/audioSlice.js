@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+const asset = (path) => import.meta.env.BASE_URL + path;
+
 export const audioSlice = createSlice({
     name: 'audio',
     initialState: {
@@ -80,7 +82,7 @@ export const audioSlice = createSlice({
 
             state.counter = 0;
             state.current = remaining[index];
-            const newPath = `/media/songs/${remaining[index].title.replace(/[\s'-.]/g, '')}.mp3`;
+            const newPath = asset(`media/songs/${remaining[index].title.replace(/[\s'-.]/g, '')}.mp3`);
             state.path = newPath;
             state.played = [...state.played, { ...remaining[index], path: newPath }];
         },

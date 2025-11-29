@@ -30,6 +30,8 @@ const play = useCallback((duration) => {
 }, []);
 */
 
+const asset = (path) => import.meta.env.BASE_URL + path;
+
 function Controls() {
     const { muted, theme, path, controlsVisible, playing } = useSelector(s => s.audio);
     const themeRef = useRef();
@@ -82,7 +84,7 @@ function Controls() {
                     <QuitButton />
                 </Col>
             </Row>
-            <audio ref={themeRef} src="./media/LobbyMusic.mp3" muted={muted || !theme} loop />
+            <audio ref={themeRef} src={asset('media/LobbyMusic.mp3')} muted={muted || !theme} loop />
             <audio ref={songRef} src={path} muted={muted} loop />
         </Container>
     )

@@ -3,6 +3,8 @@ import { delay, easeInOut, motion, useAnimate } from 'motion/react'
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
+const asset = (path) => import.meta.env.BASE_URL + path;
+
 export const CurtainContext = createContext(null);
 export const Curtain = ({ children }) => {
 	const muted = useSelector(s => s.audio.muted);
@@ -64,7 +66,7 @@ export const Curtain = ({ children }) => {
 						background: 'repeating-linear-gradient(to right, hsl(0, 100%, 25%), hsl(0, 100%, 25%) 40px, hsl(0, 90%, 30%) 40px, hsl(0, 90%, 30%) 80px)'
 					}}
 					/>
-				<audio ref={whoosh} src="/media/Whoosh.mp3" muted={muted} />
+				<audio ref={whoosh} src={asset('media/Whoosh.mp3')} muted={muted} />
 			</div>
 		</CurtainContext.Provider>
 	)

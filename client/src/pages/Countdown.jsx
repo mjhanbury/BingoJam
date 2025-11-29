@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toggleTheme, playNext, showControls } from "../store/slices/audioSlice";
 
+const asset = (path) => import.meta.env.BASE_URL + path;
+
 function Countdown() {
     const { muted } = useSelector(s => s.audio);
     const dispatch = useDispatch();
@@ -37,7 +39,7 @@ function Countdown() {
     return (
         <Container className={'h-100 d-flex justify-content-center align-items-center fw-bold text-light'} style={{ fontSize: '6rem' }}>
             <motion.pre>{ count > 3 ? 'Ready' : (count ? count : 1) }</motion.pre>
-            <audio ref={boop} src="./media/boop.mp3" muted={muted} />
+            <audio ref={boop} src={asset('media/boop.mp3')} muted={muted} />
         </Container>
     )
 }

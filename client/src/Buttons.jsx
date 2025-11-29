@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import { useCurtain } from './pages/Curtain';
 import { useRef } from 'react';
 
+const asset = (path) => import.meta.env.BASE_URL + path;
+
 const MuteButton = () => {
     const muted = useSelector(s => s.audio.muted);
     const dispatch = useDispatch();
@@ -150,7 +152,7 @@ const BingoButton = () => {
                 className={'fs-1 text-light'}
             />
             <p className={'text-light m-0 mt-2'}>Bingo</p>
-            <audio ref={bellRef} src="./media/Bell.mp3" muted={muted} />
+            <audio ref={bellRef} src={asset('media/Bell.mp3')} muted={muted} />
         </motion.button>
     )
 }

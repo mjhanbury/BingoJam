@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { reset, showControls, toggleTheme } from '../store/slices/audioSlice';
 //#endregion Imports
 
+const asset = (path) => import.meta.env.BASE_URL + path;
+
 const Title = () => {
 	return (
 		<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', color: 'white' }}>
@@ -83,7 +85,7 @@ const PlayButton = () => {
 				<span id="rewardId" />
 				Play
 			</motion.button>
-			<audio ref={confetti} src="./media/Confetti.mp3" muted={muted} />
+			<audio ref={confetti} src={asset('media/Confetti.mp3')} muted={muted} />
 		</Fragment>
     )
 }
